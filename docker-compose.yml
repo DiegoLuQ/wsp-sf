@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web_wsp_2:
+    build: .
+    # ports:
+    #   - "5000:5000"
+    command: python main.py
+    expose:
+      - 94
+    volumes:
+      - ./app:/app/
+    environment:
+      - SERVER_HOST=mysqldb_mariadb_1
+
+  nginx_wsp_2:
+    image: nginx:latest
+    ports:
+      - "141:80"
+    environment:
+      - VIRTUAL_PORT=80
+      - VIRTUAL_HOST=wsp.santiagofiltros.cl
+      - LETSENCRYPT_HOST=wsp.santiagofiltros.cl
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web_wsp_2
+
+networks:
+  default:
+    name: web_private_red_webapps #dbs_red_db
+    external: true
