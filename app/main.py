@@ -61,7 +61,7 @@ def ReceivedMessage():
 
         # ProcessMessages(text, number)
         # print(dataUser)
-        return {"status":"EVENT_RECEIVED"}
+        return "EVENT_RECEIVED"
         
     except Exception as e:
         print(e)
