@@ -1,3 +1,4 @@
+
 from flask import Flask, request
 import util
 import whatsappservice
@@ -40,58 +41,24 @@ def ReceivedMessage():
             "number":number
         }
         text = util.GetTextUser(message)
-        
-        text = text.lower()
-        listData = []
-        if "hola" in text:
-            data = util.TextMessage("Hola soy Sanbot, tu asistente virtual.", number)
-            dataButtons = util.ButtonsParaNavegar(number)
-            listData.append(data)
-            listData.append(dataButtons)
-        elif "informacion" in text:
-            
-            dataInicio = util.TextMessage("Porsupuesto, te puedo enviar informacion sobre SF", number)
-            dataOpciones = util.ListMessage(number)
-            listData.append(dataInicio)
-            listData.append(dataOpciones)
-            if "sucursal" in text:
-                data = util.TextMessage("Aqui te dejo la direccion de nuestra sucursal", number)
-                dataLocation = util.LocationMessage(number)
-                listData.append(data)
-                listData.append(dataLocation)
-            elif "contacto" in text:
-                data = util.TextMessage("*Centro de Contacto*:\n981732415", number)
-                listData.append(data)
 
-            
-        elif "buscar filtro" in text:
-            handle_search_product(number, text)
-
-
-        else:
-            data = util.TextMessage("No entiendo. Por favor, envía 'hola' para comenzar.", number)
-            listData.append(data)
-
-        for item in listData:
-            whatsappservice.SendMessageWhatsapp(item)
-
-        # ProcessMessages(text, number)
+        ProcessMessages(text, number)
         # print(dataUser)
-        print(f"Texto recibido: {text}")
         return "EVENT_RECEIVED"
         
     except Exception as e:
-        return "EVENT_RECEIVED"
+        raise "EVENT_RECEIVED"
 
-def handle_information(number, text):
-    print(f"En handle_information con texto: {text}")
-    listData = []
+def ProcessMessages(text,number):
     text = text.lower()
-    if "informacion" in text:
-        dataInicio = util.TextMessage("Porsupuesto, te puedo enviar informacion sobre SF", number)
-        dataOpciones = util.ListMessage(number)
-        listData.append(dataInicio)
-        listData.append(dataOpciones)
+    listData = []
+
+    if "hola" in text:
+        data = util.TextMessage("Hola soy Sanbot, tu asistente virtual. Te dejo opciones", number)
+        dataButtons = util.ListMessage(number)
+        listData.append(data)
+        listData.append(dataButtons)
+
     elif "sucursal" in text:
         data = util.TextMessage("Aqui te dejo la direccion de nuestra sucursal", number)
         dataLocation = util.LocationMessage(number)
@@ -102,21 +69,17 @@ def handle_information(number, text):
         data = util.TextMessage("*Centro de Contacto*:\n981732415", number)
         listData.append(data)
 
-    for item in listData:
-        whatsappservice.SendMessageWhatsapp(item)
+    elif "aire" in text:
+        data = util.ButtonsMessageProducts(number)
+        listData.append(data)
 
-    
+    elif "aceite" in text:
+        data = util.ButtonsMessageProducts(number)
+        listData.append(data)
 
-
-def handle_search_product(number, text):
-    print(f"En handle_search_product con texto: {text}")
-    listData = []
-    text = text.lower()
-    if "buscar filtro" in text:
-        dataInicio = util.TextMessage("Porsupuesto, aqui tienes opciones para buscar sobre nuestros productos", number)
-        dataButtons = util.ButtonsMessageProducts(number)
-        listData.append(dataInicio)
-        listData.append(dataButtons)
+    elif "filtro de combustible" in text:
+        data = util.ButtonsMessageProducts(number)
+        listData.append(data)
 
     elif "cotizar" in text:
         data = util.ButtonsMessage(number)
@@ -126,9 +89,44 @@ def handle_search_product(number, text):
         data = util.TextMessage("www.santiagofiltros.cl", number)
         listData.append(data)
 
+    elif "buscar filtro" in text:
+        data = util.TextMessage("www.santiagofiltros.cl/buscar", number)
+        listData.append(data)
+
+    elif "gracias" in text:
+        data = util.TextMessage("gracias por contactarme", number)
+
+        listData.append(data)
+    else:
+        data = util.TextMessage("lo siento, no puedo entenderte", number)
+        listData.append(data)
+
     for item in listData:
         whatsappservice.SendMessageWhatsapp(item)
     
+def GenerateMessage(text, number):
+    text = text.lower()
+
+    if "text" in text:
+        data = util.TextMessage("text", number)
+    if "format" in text:
+        data = util.TextFormatMessage(number)
+    if "image" in text:
+        data = util.ImageMessage(number)
+    if "video" in text:
+        data = util.VideoMessage(number)
+    if "audio" in text:
+        data = util.AudioMessage(number)
+    if "document" in text:
+        data = util.DocumentMessage(number)
+    if "location" in text:
+        data = util.LocationMessage(number)
+    if "button" in text:
+        data = util.ButtonsMessage(number)
+    if "list" in text:
+        data = util.ListMessage(number)
     
+    whatsappservice.SendMessageWhatsapp(data)
+
 if(__name__ == "__main__"):
     app.run(host='0.0.0.0', debug=True, port=94)
