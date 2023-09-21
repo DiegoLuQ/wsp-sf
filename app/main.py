@@ -51,7 +51,7 @@ def ReceivedMessage():
         elif "informacion" in text:
             return handle_information(number, text)
         elif "buscar filtro" in text:
-            return handle_information(number, text)
+            return handle_search_product(number, text)
         else:
             data = util.TextMessage("No entiendo. Por favor, envía 'hola' para comenzar.", number)
             listData.append(data)
@@ -64,7 +64,7 @@ def ReceivedMessage():
         return "EVENT_RECEIVED"
         
     except Exception as e:
-        print(e)
+        return "EVENT_RECEIVED"
 
 def handle_information(number, text):
     listData = []
