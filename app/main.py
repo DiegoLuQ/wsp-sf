@@ -28,7 +28,7 @@ def ReceivedMessage():
         entry = (body["entry"])[0]
         changes = (entry["changes"])[0]
         value = changes["value"]
-        message = value["messages"][0]
+        message = (value["messages"])[0]
         idWA=( body['entry'])[0]['changes'][0]['value']['messages'][0]['id']
         number = message["from"]
         dataUser = {
@@ -64,7 +64,7 @@ def ReceivedMessage():
         return {"status":"EVENT_RECEIVED"}
         
     except Exception as e:
-        raise "EVENT_RECEIVED"
+        print(e)
 
 def handle_information(number, text):
     listData = []
