@@ -49,9 +49,11 @@ def ReceivedMessage():
             listData.append(data)
             listData.append(dataButtons)
         elif "informacion" in text:
-            handle_information(number, text)
+            return handle_information(number, text)
+            
         elif "buscar filtro" in text:
             handle_search_product(number, text)
+            return "EVENT_RECEIVED"
         else:
             data = util.TextMessage("No entiendo. Por favor, envía 'hola' para comenzar.", number)
             listData.append(data)
