@@ -29,15 +29,48 @@ def ReceivedMessage():
         changes = (entry["changes"])[0]
         value = changes["value"]
         message = (value["messages"])[0]
+        idWA=( body['entry'])[0]['changes'][0]['value']['messages'][0]['id']
         number = message["from"]
-
+        dataUser = {
+            "id": idWA,
+            "body": body,
+            "changes": changes,
+            "value":value,
+            "message":message,
+            "number":number
+        }
         text = util.GetTextUser(message)
-        ProcessMessages(text, number)
+        text = text.lower()
+        listData = []
+        if "hola" in text:
+            data = util.TextMessage("Hola soy Sanbot, tu asistente virtual. que requiere?", number)
+            dataButtons = util.ButtonsParaNavegar(number)
+            listData.append(data)
+            listData.append(dataButtons)
+        elif "informacion" in text:
+            return handle_information(number)
+        elif "buscar filtro" in text:
+            return handle_information(number)
+        else:
+            data = util.TextMessage("No entiendo. Por favor, envía 'hola' para comenzar.", number)
+            listData.append(data)
 
-        return "EVENT_RECEIVED"
+        for item in listData:
+            whatsappservice.SendMessageWhatsapp(item)
+
+        # ProcessMessages(text, number)
+        # print(dataUser)
+        return {"status":"EVENT_RECEIVED"}
         
     except Exception as e:
         raise "EVENT_RECEIVED"
+
+def handle_information(number):
+    
+    return util.ListMessage(number)
+
+def handle_search_product(number):
+    return util.ButtonsMessageProducts(number)
 
 def ProcessMessages(text,number):
     text = text.lower()
@@ -95,30 +128,5 @@ def ProcessMessages(text,number):
         whatsappservice.SendMessageWhatsapp(item)
     
     
-
-def GenerateMessage(text, number):
-    text = text.lower()
-
-    if "text" in text:
-        data = util.TextMessage("text", number)
-    if "format" in text:
-        data = util.TextFormatMessage(number)
-    if "image" in text:
-        data = util.ImageMessage(number)
-    if "video" in text:
-        data = util.VideoMessage(number)
-    if "audio" in text:
-        data = util.AudioMessage(number)
-    if "document" in text:
-        data = util.DocumentMessage(number)
-    if "location" in text:
-        data = util.LocationMessage(number)
-    if "button" in text:
-        data = util.ButtonsMessage(number)
-    if "list" in text:
-        data = util.ListMessage(number)
-    
-    whatsappservice.SendMessageWhatsapp(data)
-
 if(__name__ == "__main__"):
     app.run(host='0.0.0.0', debug=True, port=94)
