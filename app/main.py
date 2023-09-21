@@ -44,16 +44,18 @@ def ReceivedMessage():
         text = text.lower()
         listData = []
         if "hola" in text:
-            data = util.TextMessage("Hola soy Sanbot, tu asistente virtual. que requiere?", number)
+            data = util.TextMessage("Hola soy Sanbot, tu asistente virtual.", number)
             dataButtons = util.ButtonsParaNavegar(number)
             listData.append(data)
             listData.append(dataButtons)
         elif "informacion" in text:
-            return handle_information(number, text)
+            handle_information(number, text)
+
             
         elif "buscar filtro" in text:
             handle_search_product(number, text)
-            return "EVENT_RECEIVED"
+
+
         else:
             data = util.TextMessage("No entiendo. Por favor, envía 'hola' para comenzar.", number)
             listData.append(data)
@@ -63,13 +65,14 @@ def ReceivedMessage():
 
         # ProcessMessages(text, number)
         # print(dataUser)
-        print(body)
+        print(f"Texto recibido: {text}")
         return "EVENT_RECEIVED"
         
     except Exception as e:
         return "EVENT_RECEIVED"
 
 def handle_information(number, text):
+    print(f"En handle_information con texto: {text}")
     listData = []
     text = text.lower()
     if "informacion" in text:
@@ -89,10 +92,12 @@ def handle_information(number, text):
 
     for item in listData:
         whatsappservice.SendMessageWhatsapp(item)
+
     
 
 
 def handle_search_product(number, text):
+    print(f"En handle_search_product con texto: {text}")
     listData = []
     text = text.lower()
     if "buscar filtro" in text:
@@ -107,61 +112,6 @@ def handle_search_product(number, text):
 
     elif "ver catalogo" in text:
         data = util.TextMessage("www.santiagofiltros.cl", number)
-        listData.append(data)
-
-    for item in listData:
-        whatsappservice.SendMessageWhatsapp(item)
-
-def ProcessMessages(text,number):
-    text = text.lower()
-    listData = []
-
-    if "hola" in text:
-        data = util.TextMessage("Hola soy Sanbot, tu asistente virtual. Te dejo opciones", number)
-        dataButtons = util.ListMessage(number)
-        listData.append(data)
-        listData.append(dataButtons)
-
-    elif "sucursal" in text:
-        data = util.TextMessage("Aqui te dejo la direccion de nuestra sucursal", number)
-        dataLocation = util.LocationMessage(number)
-        listData.append(data)
-        listData.append(dataLocation)
-
-    elif "contacto" in text:
-        data = util.TextMessage("*Centro de Contacto*:\n981732415", number)
-        listData.append(data)
-
-    elif "aire" in text:
-        data = util.ButtonsMessageProducts(number)
-        listData.append(data)
-
-    elif "aceite" in text:
-        data = util.ButtonsMessageProducts(number)
-        listData.append(data)
-
-    elif "filtro de combustible" in text:
-        data = util.ButtonsMessageProducts(number)
-        listData.append(data)
-
-    elif "cotizar" in text:
-        data = util.ButtonsMessage(number)
-        listData.append(data)
-
-    elif "ver catalogo" in text:
-        data = util.TextMessage("www.santiagofiltros.cl", number)
-        listData.append(data)
-
-    elif "buscar filtro" in text:
-        data = util.TextMessage("www.santiagofiltros.cl/buscar", number)
-        listData.append(data)
-
-    elif "gracias" in text:
-        data = util.TextMessage("gracias por contactarme", number)
-
-        listData.append(data)
-    else:
-        data = util.TextMessage("lo siento, no puedo entenderte", number)
         listData.append(data)
 
     for item in listData:
