@@ -28,7 +28,7 @@ def ReceivedMessage():
         entry = (body["entry"])[0]
         changes = (entry["changes"])[0]
         value = changes["value"]
-        message = (value["messages"])[0]
+        message = value["messages"][0]
         idWA=( body['entry'])[0]['changes'][0]['value']['messages'][0]['id']
         number = message["from"]
         dataUser = {
@@ -40,6 +40,7 @@ def ReceivedMessage():
             "number":number
         }
         text = util.GetTextUser(message)
+        print(body)
         text = text.lower()
         listData = []
         if "hola" in text:
@@ -84,7 +85,8 @@ def handle_information(number, text):
         listData.append(data)
 
     for item in listData:
-            whatsappservice.SendMessageWhatsapp(item)
+        whatsappservice.SendMessageWhatsapp(item)
+    
 
 
 def handle_search_product(number, text):
@@ -102,7 +104,7 @@ def handle_search_product(number, text):
     elif "ver catalogo" in text:
         data = util.TextMessage("www.santiagofiltros.cl", number)
         listData.append(data)
-        
+
     for item in listData:
         whatsappservice.SendMessageWhatsapp(item)
 
