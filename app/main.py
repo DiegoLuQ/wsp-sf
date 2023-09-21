@@ -40,7 +40,7 @@ def ReceivedMessage():
             "number":number
         }
         text = util.GetTextUser(message)
-        print(body)
+        
         text = text.lower()
         listData = []
         if "hola" in text:
@@ -49,9 +49,9 @@ def ReceivedMessage():
             listData.append(data)
             listData.append(dataButtons)
         elif "informacion" in text:
-            return handle_information(number, text)
+            handle_information(number, text)
         elif "buscar filtro" in text:
-            return handle_search_product(number, text)
+            handle_search_product(number, text)
         else:
             data = util.TextMessage("No entiendo. Por favor, envía 'hola' para comenzar.", number)
             listData.append(data)
@@ -61,6 +61,7 @@ def ReceivedMessage():
 
         # ProcessMessages(text, number)
         # print(dataUser)
+        print(body)
         return "EVENT_RECEIVED"
         
     except Exception as e:
@@ -94,11 +95,12 @@ def handle_search_product(number, text):
     text = text.lower()
     if "buscar filtro" in text:
         dataInicio = util.TextMessage("Porsupuesto, aqui tienes opciones para buscar sobre nuestros productos", number)
-        dataOpciones = util.ListMessage(number)
+        dataButtons = util.ButtonsMessageProducts(number)
         listData.append(dataInicio)
-        listData.append(dataOpciones)
+        listData.append(dataButtons)
+
     elif "cotizar" in text:
-        data = util.ButtonsMessageProducts(number)
+        data = util.ButtonsMessage(number)
         listData.append(data)
 
     elif "ver catalogo" in text:
