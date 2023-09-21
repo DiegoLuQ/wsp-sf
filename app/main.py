@@ -49,7 +49,19 @@ def ReceivedMessage():
             listData.append(data)
             listData.append(dataButtons)
         elif "informacion" in text:
-            handle_information(number, text)
+            
+            dataInicio = util.TextMessage("Porsupuesto, te puedo enviar informacion sobre SF", number)
+            dataOpciones = util.ListMessage(number)
+            listData.append(dataInicio)
+            listData.append(dataOpciones)
+            if "sucursal" in text:
+                data = util.TextMessage("Aqui te dejo la direccion de nuestra sucursal", number)
+                dataLocation = util.LocationMessage(number)
+                listData.append(data)
+                listData.append(dataLocation)
+            elif "contacto" in text:
+                data = util.TextMessage("*Centro de Contacto*:\n981732415", number)
+                listData.append(data)
 
             
         elif "buscar filtro" in text:
