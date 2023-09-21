@@ -48,9 +48,9 @@ def ReceivedMessage():
             listData.append(data)
             listData.append(dataButtons)
         elif "informacion" in text:
-            return handle_information(number)
+            return handle_information(number, text)
         elif "buscar filtro" in text:
-            return handle_information(number)
+            return handle_information(number, text)
         else:
             data = util.TextMessage("No entiendo. Por favor, envía 'hola' para comenzar.", number)
             listData.append(data)
@@ -65,12 +65,46 @@ def ReceivedMessage():
     except Exception as e:
         raise "EVENT_RECEIVED"
 
-def handle_information(number):
-    
-    return util.ListMessage(number)
+def handle_information(number, text):
+    listData = []
+    text = text.lower()
+    if "informacion" in text:
+        dataInicio = util.TextMessage("Porsupuesto, te puedo enviar informacion sobre SF", number)
+        dataOpciones = util.ListMessage(number)
+        listData.append(dataInicio)
+        listData.append(dataOpciones)
+    elif "sucursal" in text:
+        data = util.TextMessage("Aqui te dejo la direccion de nuestra sucursal", number)
+        dataLocation = util.LocationMessage(number)
+        listData.append(data)
+        listData.append(dataLocation)
 
-def handle_search_product(number):
-    return util.ButtonsMessageProducts(number)
+    elif "contacto" in text:
+        data = util.TextMessage("*Centro de Contacto*:\n981732415", number)
+        listData.append(data)
+
+    for item in listData:
+            whatsappservice.SendMessageWhatsapp(item)
+
+
+def handle_search_product(number, text):
+    listData = []
+    text = text.lower()
+    if "buscar filtro" in text:
+        dataInicio = util.TextMessage("Porsupuesto, aqui tienes opciones para buscar sobre nuestros productos", number)
+        dataOpciones = util.ListMessage(number)
+        listData.append(dataInicio)
+        listData.append(dataOpciones)
+    elif "cotizar" in text:
+        data = util.ButtonsMessageProducts(number)
+        listData.append(data)
+
+    elif "ver catalogo" in text:
+        data = util.TextMessage("www.santiagofiltros.cl", number)
+        listData.append(data)
+        
+    for item in listData:
+        whatsappservice.SendMessageWhatsapp(item)
 
 def ProcessMessages(text,number):
     text = text.lower()
